@@ -97,7 +97,6 @@ export default function ChatWindow() {
       }`}
     >
       <div className="flex flex-col h-full ">
-        {/* Messages Section */}
         <div
           className="overflow-y-auto p-4 flex-1 space-y-2 "
           ref={messagesEndRef}
@@ -112,7 +111,6 @@ export default function ChatWindow() {
           ))}
         </div>
 
-        {/* Login Prompt or Input Section */}
         {!loggedIn ? (
           <div className="p-4">
             <button

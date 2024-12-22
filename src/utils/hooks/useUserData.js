@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { onMessage, offMessage } from '../socket'; // Import from socket.js
+import { onMessage, offMessage } from '../socket'; 
 import api from "../Api/axiosConfig";
 
 const fetchUserData = async () => {
@@ -10,8 +10,6 @@ const fetchUserData = async () => {
 
 const useUserData = (loggedIn) => {
   const queryClient = useQueryClient();
-
-  // Fetch user data using React Query
   const { data, ...rest } = useQuery({
     queryKey: ["userData"],
     queryFn: fetchUserData,
@@ -20,22 +18,20 @@ const useUserData = (loggedIn) => {
     refetchOnMount: false, 
   });
 
-  // WebSocket setup to listen for real-time updates
   useEffect(() => {
     if (!loggedIn) return;
 
     const handleUserDataUpdate = (newBalance) => {
       queryClient.setQueryData(["userData"], (prevData) => ({
         ...prevData,
-        balance: newBalance, // Update only the balance field
+        balance: newBalance, 
       }));
     };
 
-    // Listen for user data updates via WebSocket
     onMessage('userDataUpdate', handleUserDataUpdate);
 
     return () => {
-      offMessage('userDataUpdate'); // Cleanup WebSocket listener
+      offMessage('userDataUpdate'); 
     };
   }, [loggedIn, queryClient]);
 

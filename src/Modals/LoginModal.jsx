@@ -10,7 +10,6 @@ const LoginModal = ({ closeModal }) => {
   const { openRecoverPasswordModal } = useModalStore();
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
-  // UseStates
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
 

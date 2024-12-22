@@ -1,9 +1,9 @@
 import React from "react";
-import useUserData from "../utils/hooks/useUserData";
-import useAuthStore from "../utils/ZustandStore/useAuthStore";
-import Header from "../components/header";
+import useUserData from "../../utils/hooks/useUserData";
+import useAuthStore from "../../utils/ZustandStore/useAuthStore";
+import Header from "../../components/header";
 import { IoSettingsSharp } from "react-icons/io5";
-import useModalStore from "../utils/ZustandStore/useModalStore";
+import useModalStore from "../../utils/ZustandStore/useModalStore";
 
 export default function Profile() {
   const { loggedIn } = useAuthStore();
@@ -17,12 +17,10 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-gray-900 px-4 sm:px-6">
-      {/* Header Section */}
       <div className="w-full mt-6">
         <Header title="Profile" icon={<IoSettingsSharp />} links={links} />
       </div>
 
-      {/* Profile Section */}
       <div className="w-full max-w-screen-lg mx-auto mt-4 p-6 flex flex-col border-2 border-gray-700 rounded-lg bg-gray-800">
         {loggedIn ? (
           <>

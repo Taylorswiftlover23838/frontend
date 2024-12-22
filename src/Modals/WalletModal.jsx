@@ -12,12 +12,10 @@ const WalletModal = ({ closeModal }) => {
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 px-4 sm:px-6 md:px-8">
       <div className="bg-white p-8 rounded-xl w-full max-w-md relative shadow-lg transform transition-all animate-drop-from-top">
-        {/* Wallet Title */}
         <div className="flex justify-center mb-6">
           <h2 className="text-3xl font-semibold text-gray-800">Wallet</h2>
         </div>
 
-        {/* Close Button */}
         <button
           onClick={closeModal}
           className="absolute top-4 right-4 text-2xl text-gray-500 hover:text-gray-800 transition-colors"
@@ -25,9 +23,7 @@ const WalletModal = ({ closeModal }) => {
           <ImExit />
         </button>
 
-        {/* Modal Header */}
         <div className="flex justify-between items-center mb-6">
-          {/* Tabs Section */}
           <Tabs>
             <TabList className="flex gap-4">
               <Tab
@@ -50,7 +46,6 @@ const WalletModal = ({ closeModal }) => {
                   Purchase
                 </h3>
 
-                {/* Promo Code Section as Button */}
                 <button
                   onClick={() => openPromoCodeModal()}
                   className="mt-4 w-full flex items-center justify-between border border-gray-300 hover:bg-gray-100 focus:outline-none rounded-lg px-4 py-2 bg-white text-gray-700 font-medium shadow-sm focus:ring-2 focus:ring-blue-400"

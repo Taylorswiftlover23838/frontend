@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import useAuthStore from '../utils/ZustandStore/useAuthStore';
-import Header from '../components/header';
+import useAuthStore from '../../utils/ZustandStore/useAuthStore';
+import Header from '../../components/header';
 import { IoSettingsSharp } from 'react-icons/io5';
-import useModalStore from '../utils/ZustandStore/useModalStore';
-import useDropdownStore from '../utils/ZustandStore/useDropDownStore';
-import api from '../utils/Api/axiosConfig';
+import useModalStore from '../../utils/ZustandStore/useModalStore';
+import useDropdownStore from '../../utils/ZustandStore/useDropDownStore';
+import api from '../../utils/Api/axiosConfig';
 import 'react-tabs/style/react-tabs.css';
 import { FaDiceFive } from 'react-icons/fa6';
 import { TbCoinFilled } from 'react-icons/tb';
 import { GiPokerHand } from 'react-icons/gi';
 import { TbSpeakerphone } from 'react-icons/tb';
+import { FaCreditCard } from 'react-icons/fa6';  
 
 const transactionLogos = {
   Dice: <FaDiceFive className="text-xl" />,
   Blackjack: <GiPokerHand className="text-xl" />,
   CoinFlip: <TbCoinFilled className="text-xl" />,
   Promotion: <TbSpeakerphone className="text-xl" />,
+  Purchase: <FaCreditCard className="text-xl" />  
 };
 
 export default function Transactions() {
@@ -56,7 +58,7 @@ export default function Transactions() {
     { linkText: 'Transactions', linkUrl: '/profile/transactions' },
   ];
 
-  const transactionTypes = ['All', 'Dice', 'Blackjack', 'CoinFlip', 'Promotion'];
+  const transactionTypes = ['All', 'Dice', 'Blackjack', 'CoinFlip', 'Promotion', 'Purchase'];  // Add "Purchase" type
 
   const handleTransactionTypeSelect = (type) => {
     setSelectedTransaction(type);
@@ -69,7 +71,6 @@ export default function Transactions() {
         <Header title="Profile" icon={<IoSettingsSharp />} links={links} />
       </div>
 
-      {/* Dropdown for transaction types */}
       <div className="w-full max-w-screen-lg mx-auto mt-6 p-4 bg-gray-800 border-2 border-gray-700 rounded-lg flex items-center justify-start">
         <div className="relative w-40">
           <button
@@ -102,7 +103,6 @@ export default function Transactions() {
         </div>
       </div>
 
-      {/* Transactions Section */}
       <div className="w-full max-w-screen-lg mx-auto mt-4 p-6 flex flex-col justify-center items-center border-2 border-gray-700 rounded-lg bg-gray-800">
         {loggedIn ? (
           <div className="text-white w-full">
@@ -116,17 +116,14 @@ export default function Transactions() {
                       key={idx}
                       className="p-3 bg-gray-700 rounded-lg flex items-center justify-between text-sm sm:text-md text-white"
                     >
-                      {/* Logo */}
                       <span className="flex items-center justify-center w-8 h-8 mr-4">
-                        {transactionLogos[transaction.kind]}
+                        {transactionLogos[transaction.kind]}  
                       </span>
 
-                      {/* Kind and Action */}
                       <span className="flex-[2] text-left font-bold">
                         {`${transaction.kind} - ${transaction.action}`}
                       </span>
 
-                      {/* Amount */}
                       <span
                         className={`flex-1 text-right font-bold ${transaction.amount > 0 ? 'text-green-500' : 'text-red-500'
                           }`}

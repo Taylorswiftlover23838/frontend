@@ -29,7 +29,6 @@ function SideBar({ children }) {
 
   return (
     <div className="flex">
-      {/* Sidebar for Larger Screens */}
       <div
         className={`fixed top-0 left-0 h-full bg-gray-800 mt-20 shadow-lg transition-all duration-300 z-30 ${
           isMobile
@@ -41,7 +40,6 @@ function SideBar({ children }) {
             : "w-16"
         }`}
       >
-        {/* Sidebar Content */}
         <div
           className="flex items-center p-4 cursor-pointer hover:bg-gray-700 transition-all"
           onClick={toggleSideBar}
@@ -52,7 +50,6 @@ function SideBar({ children }) {
             MENU
           </p>
           <div className={`ml-auto ${isSideBarOpen ? "ml-16" : "ml-0"}`}>
-            {/* Remove onClick here from this icon */}
             <CgMenuRightAlt className="text-white text-2xl" />
           </div>
         </div>
@@ -74,7 +71,7 @@ function SideBar({ children }) {
           ))}
         </div>
       </div>
-      {/* Mobile Footer */}
+
       {isMobile && (
         <MobileFooter toggleSidebar={toggleSideBar} toggleChat={toggleChat} />
       )}

@@ -10,12 +10,12 @@ import Modals from "./components/Modals";
 // Pages
 import PageNotFound from "./Pages/PageNotFound";
 import Home from "./Pages/Home";
-import CoinFlip from "./Pages/CoinFlip";
-import Profile from "./Pages/Profile";
-import Dice from "./Pages/Dice";
-import BlackJack from "./Pages/BlackJack"
+import CoinFlip from "./Pages/Games/CoinFlip";
+import Dice from "./Pages/Games/Dice";
+import BlackJack from "./Pages/Games/BlackJack";
 import Footer from "./components/Footer";
-import Transactions from "./Pages/Transactions";
+import Transactions from "./Pages/User/Transactions";
+import Profile from "./Pages/User/Profile";
 
 export default function App() {
   return (

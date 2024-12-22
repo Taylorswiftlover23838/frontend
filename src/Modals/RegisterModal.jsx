@@ -5,11 +5,9 @@ import useAuthStore from "../utils/ZustandStore/useAuthStore";
 import api from "../utils/Api/axiosConfig";
 
 const RegisterModal = ({ closeModal }) => {
-  //Zustand
   const { setLoggedIn } = useAuthStore();
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
-  //UseStates
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

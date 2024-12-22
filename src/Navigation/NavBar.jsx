@@ -12,7 +12,6 @@ import ProfileDropDown from "../components/ProfileDropDown";
 import  useDropdownStore from "../utils/ZustandStore/useDropDownStore";
 
 export default function NavBar() {
-  // Zustand
   const { loggedIn } = useAuthStore();
   const { isProfileDropDownOpen, toggleProfileDropDown } = useDropdownStore(
     (state) => state
@@ -22,13 +21,11 @@ export default function NavBar() {
   const { openLoginModal, openRegisterModal, openWalletModal } =
     useModalStore();
 
-  // React-query
   const { data } = useUserData(loggedIn);
 
   return (
     <nav className="bg-gray-800 text-white fixed w-full h-20 z-50">
       <div className="mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-full relative">
-        {/* Logo Link */}
         <Link
           to="/"
           className="flex items-center cursor-pointer absolute left-0"
@@ -56,7 +53,6 @@ export default function NavBar() {
           </div>
         )}
 
-        {/* Right Section */}
         <div className="flex items-center space-x-2 sm:space-x-4 ml-auto relative">
           {!loggedIn ? (
             <>
@@ -87,7 +83,7 @@ export default function NavBar() {
             </>
           )}
 
-          {/* Profile Dropdown */}
+
           {isProfileDropDownOpen && <ProfileDropDown />}
 
           <button
