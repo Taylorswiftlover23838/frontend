@@ -29,7 +29,7 @@ export default function PromoCodeModal({ closeModal }) {
   };
 
   return (
-    <div className="fixed inset-0 flex bg-opacity-50 bg-gray-800 items-center justify-center z-50 px-4 sm:px-6 md:px-8">
+    <div className="fixed inset-0 flex items-center justify-center z-50 px-4 sm:px-6 md:px-8 bg-gray-500 bg-opacity-50">
       <div className="bg-white p-8 rounded-lg w-full max-w-md relative animate-drop-from-top">
         <button
           className="absolute top-4 right-4 text-2xl text-gray-600 hover:text-gray-900"

@@ -7,72 +7,116 @@ const useModalStore = create((set) => ({
   isResetPasswordModalOpen: false,
   isWalletModalOpen: false,
   isPromoCodeModalOpen: false,
+  isCryptoModalOpen: false,
+  isPaymentOptionsModalOpen: false,
+  isTransactionModalOpen: false,
 
-  openLoginModal: () => 
+  selectedTransaction: null,
+  selectedPaymentOption: null,
+
+  openLoginModal: () =>
     set((state) => ({
       isLoginModalOpen: !state.isLoginModalOpen,
     })),
 
-  closeLoginModal: () => 
+  closeLoginModal: () =>
     set((state) => ({
       isLoginModalOpen: !state.isLoginModalOpen,
     })),
 
-  openRegisterModal: () => 
+  openRegisterModal: () =>
     set((state) => ({
       isRegisterModalOpen: !state.isRegisterModalOpen,
     })),
 
-  closeRegisterModal: () => 
+  closeRegisterModal: () =>
     set((state) => ({
       isRegisterModalOpen: !state.isRegisterModalOpen,
     })),
 
-  openRecoverPasswordModal: () => 
+  openRecoverPasswordModal: () =>
     set((state) => ({
       isRecoverPasswordModalOpen: !state.isRecoverPasswordModalOpen,
-      isLoginModalOpen: false
+      isLoginModalOpen: false,
     })),
 
-  closeRecoverPasswordModal: () => 
+  closeRecoverPasswordModal: () =>
     set((state) => ({
       isRecoverPasswordModalOpen: !state.isRecoverPasswordModalOpen,
-      isLoginModalOpen: true
+      isLoginModalOpen: true,
     })),
 
-  openResetPasswordModal: () => 
+  openResetPasswordModal: () =>
     set((state) => ({
       isResetPasswordModalOpen: !state.isResetPasswordModalOpen,
-      isRecoverPasswordModalOpen: false
+      isRecoverPasswordModalOpen: false,
     })),
 
-  closeResetPasswordModal: () => 
+  closeResetPasswordModal: () =>
     set((state) => ({
       isResetPasswordModalOpen: !state.isResetPasswordModalOpen,
-      isRecoverPasswordModalOpen: true
+      isRecoverPasswordModalOpen: true,
     })),
 
-  openWalletModal: () => 
+  openWalletModal: () =>
     set((state) => ({
       isWalletModalOpen: !state.isWalletModalOpen,
     })),
 
-  closeWalletModal: () => 
+  closeWalletModal: () =>
     set((state) => ({
       isWalletModalOpen: !state.isWalletModalOpen,
     })),
 
-  openPromoCodeModal: () => 
+  openPromoCodeModal: () =>
     set((state) => ({
       isPromoCodeModalOpen: !state.isPromoCodeModalOpen,
-      isWalletModalOpen: false
+      isWalletModalOpen: false,
     })),
 
-  closePromoCodeModal: () => 
+  closePromoCodeModal: () =>
     set((state) => ({
       isPromoCodeModalOpen: !state.isPromoCodeModalOpen,
-      isWalletModalOpen: true
+      isWalletModalOpen: true,
     })),
+
+  openCryptoModal: () =>
+    set((state) => ({
+      isCryptoModalOpen: !state.isCryptoModalOpen,
+      isWalletModalOpen: false,
+    })),
+
+  closeCryptoModal: () =>
+    set((state) => ({
+      isCryptoModalOpen: !state.isCryptoModalOpen,
+      isWalletModalOpen: true,
+    })),
+
+  openPaymentOptionsModal: (option) =>
+    set({
+      isPaymentOptionsModalOpen: true,
+      selectedPaymentOption: option,
+      isWalletModalOpen: false,
+    }),
+
+  closePaymentOptionsModal: () =>
+    set({
+      isPaymentOptionsModalOpen: false,
+      selectedPaymentOption: null,
+      isWalletModalOpen: true,
+    }),
+
+  openTransactionModal: (transaction) =>
+    set({
+      isTransactionModalOpen: true,
+      selectedTransaction: transaction,
+    }),
+    
+  closeTransactionModal: () =>
+    set({
+      isTransactionModalOpen: false,
+      selectedTransaction: null,
+    }),
 }));
 
 export default useModalStore;

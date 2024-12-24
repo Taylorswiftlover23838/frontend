@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes} from "react-router-dom";
 
 // Navigation
 import SideBar from "./Navigation/SideBar";
@@ -20,25 +20,25 @@ import Profile from "./Pages/User/Profile";
 export default function App() {
   return (
     <>
-      <BrowserRouter>
-      <div className="bg-gray-900">
-        <NavBar />
-        <ChatWindow />
-        <Modals />
-        <SideBar>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/coinflip" element={<CoinFlip />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/dice" element={<Dice />} />
-            <Route path="/blackjack" element={<BlackJack/>}/>
-            <Route path="/profile/transactions" element={<Transactions/>}/>
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </SideBar>
-        <Footer />
-      </div>
-    </BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <div className="bg-gray-900">
+          <NavBar />
+          <ChatWindow />
+          <Modals />
+          <SideBar>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/coinflip" element={<CoinFlip />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/dice" element={<Dice />} />
+              <Route path="/blackjack" element={<BlackJack />} />
+              <Route path="/profile/transactions" element={<Transactions />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </SideBar>
+          <Footer />
+        </div>
+      </BrowserRouter>
     </>
   );
 }

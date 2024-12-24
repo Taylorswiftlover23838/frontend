@@ -5,7 +5,6 @@ import { IoMdCloseCircle } from "react-icons/io";
 export default function PageNotFound() {
   return (
     <div className="min-h-screen bg-gray-900 px-4 sm:px-6"> 
-      {/* Header Section */}
       <div className="w-full mt-6">
         <Header title="PageNotFound" icon={<IoMdCloseCircle />} />
       </div>

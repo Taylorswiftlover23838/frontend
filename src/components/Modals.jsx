@@ -6,21 +6,34 @@ import RecoverPasswordModal from "../Modals/RecoverPasswordModal";
 import ResetPasswordModal from "../Modals/ResetPasswordModal";
 import WalletModal from "../Modals/WalletModal";
 import PromoCodeModal from "../Modals/PromoCodeModal";
+import CryptoModal from "../Modals/CryptoModal";
+import PaymentOptionsModal from "../Modals/PaymentOptionsModal";
+import TransactionModal from "../Modals/TransactionModal";
 
 export default function Modals() {
   const {
+    selectedTransaction,
+    selectedPaymentOption,
+
     isLoginModalOpen,
     isRegisterModalOpen,
     isRecoverPasswordModalOpen,
     isResetPasswordModalOpen,
     isWalletModalOpen,
     isPromoCodeModalOpen,
+    isCryptoModalOpen,
+    isPaymentOptionsModalOpen,
+    isTransactionModalOpen,
+
     closeLoginModal,
     closeRegisterModal,
     closeRecoverPasswordModal,
     closeResetPasswordModal,
     closeWalletModal,
     closePromoCodeModal,
+    closeCryptoModal,
+    closePaymentOptionsModal,
+    closeTransactionModal,
   } = useModalStore();
 
   return (
@@ -42,6 +55,22 @@ export default function Modals() {
       {isWalletModalOpen && <WalletModal closeModal={closeWalletModal} />}
       {isPromoCodeModalOpen && (
         <PromoCodeModal closeModal={closePromoCodeModal} />
+      )}
+      {isCryptoModalOpen && <CryptoModal closeModal={closeCryptoModal} />}
+
+      {isPaymentOptionsModalOpen && (
+        <PaymentOptionsModal
+          option={selectedPaymentOption}
+          onClose={closePaymentOptionsModal}
+        />
+      )}
+
+      {/* Transaction Modal */}
+      {isTransactionModalOpen && (
+        <TransactionModal
+          transaction={selectedTransaction}
+          onClose={closeTransactionModal}
+        />
       )}
     </>
   );

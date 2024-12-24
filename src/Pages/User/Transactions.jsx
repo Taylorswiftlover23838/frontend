@@ -10,19 +10,29 @@ import { FaDiceFive } from 'react-icons/fa6';
 import { TbCoinFilled } from 'react-icons/tb';
 import { GiPokerHand } from 'react-icons/gi';
 import { TbSpeakerphone } from 'react-icons/tb';
-import { FaCreditCard } from 'react-icons/fa6';  
+import { FaCreditCard } from 'react-icons/fa6';
+import { formatDate } from '../../utils/formatDate';
+import { BsWechat } from "react-icons/bs";
+import { SiCashapp } from "react-icons/si";
+import { FaCcAmazonPay } from "react-icons/fa";
 
 const transactionLogos = {
   Dice: <FaDiceFive className="text-xl" />,
   Blackjack: <GiPokerHand className="text-xl" />,
   CoinFlip: <TbCoinFilled className="text-xl" />,
   Promotion: <TbSpeakerphone className="text-xl" />,
-  Purchase: <FaCreditCard className="text-xl" />  
+  Purchase: {
+    card: <FaCreditCard className="text-xl" />,
+    amazon_pay: <FaCcAmazonPay className="text-xl" />,
+    wechat_pay: <BsWechat className="text-xl" />,
+    cashapp: <SiCashapp className="text-xl" />
+  }
 };
 
 export default function Transactions() {
   const { loggedIn } = useAuthStore();
   const { openLoginModal } = useModalStore();
+  const { openTransactionModal } = useModalStore();
   const {
     selectedTransaction,
     transactionDropdownOpen,
@@ -32,13 +42,27 @@ export default function Transactions() {
 
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [transactionCount, setTransactionCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchTransactions = async (transactionType) => {
-    const body = { transactionType };
+  const links = [
+    { linkText: 'General', linkUrl: '/profile' },
+    { linkText: 'Transactions', linkUrl: '/profile/transactions' },
+  ];
+
+  const transactionTypes = ['All', 'Dice', 'Blackjack', 'CoinFlip', 'Promotion', 'Purchase'];
+  const limit = 10;
+
+  const fetchTransactions = async (transactionType, page) => {
+    const body = { transactionType, page };
     setLoading(true);
     try {
       const response = await api.post('/transactionsData', body);
+      if (response.data.transactions.length === 0) {
+        console.log('No transactions found.');
+      }
       setTransactions(response.data.transactions);
+      setTransactionCount(response.data.transactionCount);
     } catch (err) {
       console.error('Error fetching transactions:', err);
     } finally {
@@ -49,29 +73,34 @@ export default function Transactions() {
   useEffect(() => {
     if (loggedIn) {
       setTransactions([]);
-      fetchTransactions(selectedTransaction);
+      fetchTransactions(selectedTransaction, currentPage);
     }
-  }, [loggedIn, selectedTransaction]);
-
-  const links = [
-    { linkText: 'General', linkUrl: '/profile' },
-    { linkText: 'Transactions', linkUrl: '/profile/transactions' },
-  ];
-
-  const transactionTypes = ['All', 'Dice', 'Blackjack', 'CoinFlip', 'Promotion', 'Purchase'];  // Add "Purchase" type
+  }, [loggedIn, selectedTransaction, currentPage]);
 
   const handleTransactionTypeSelect = (type) => {
     setSelectedTransaction(type);
+    setCurrentPage(1); 
     toggleTransactionDropdown();
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const totalPages = Math.ceil(transactionCount / limit);
+
+  const renderTransactionLogo = (transaction) => {
+    return transaction.kind === 'Purchase'
+      ? transactionLogos.Purchase[transaction.action]
+      : transactionLogos[transaction.kind];
   };
 
   return (
     <div className="min-h-screen bg-gray-900 px-4 sm:px-6">
-      <div className="w-full mt-6">
-        <Header title="Profile" icon={<IoSettingsSharp />} links={links} />
-      </div>
+      <Header title="Profile" icon={<IoSettingsSharp />} links={links} />
 
-      <div className="w-full max-w-screen-lg mx-auto mt-6 p-4 bg-gray-800 border-2 border-gray-700 rounded-lg flex items-center justify-start">
+      {/* Dropdown Section */}
+      <div className="w-full max-w-screen-lg mx-auto mt-6 p-6 bg-gray-800 border-2 border-gray-700 rounded-lg flex justify-start items-center">
         <div className="relative w-40">
           <button
             onClick={toggleTransactionDropdown}
@@ -82,18 +111,12 @@ export default function Transactions() {
             {selectedTransaction}
           </button>
           {transactionDropdownOpen && (
-            <div
-              className="absolute mt-2 bg-gray-700 rounded-lg shadow-lg w-full animate-drop-from-top z-10"
-              role="menu"
-            >
+            <div className="absolute mt-2 bg-gray-700 rounded-lg shadow-lg w-full animate-drop-from-top z-10">
               {transactionTypes.map((type, index) => (
                 <button
                   key={index}
-                  onClick={() => {
-                    handleTransactionTypeSelect(type);
-                  }}
+                  onClick={() => handleTransactionTypeSelect(type)}
                   className="block px-4 py-2 text-xs sm:text-sm text-gray-200 hover:bg-gray-600 hover:text-white w-full text-left"
-                  role="menuitem"
                 >
                   {type}
                 </button>
@@ -103,60 +126,89 @@ export default function Transactions() {
         </div>
       </div>
 
-      <div className="w-full max-w-screen-lg mx-auto mt-4 p-6 flex flex-col justify-center items-center border-2 border-gray-700 rounded-lg bg-gray-800">
+      {/* Content Section */}
+      <div className="w-full max-w-screen-lg mx-auto mt-4 p-6 flex flex-col border-2 border-gray-700 rounded-lg bg-gray-800">
         {loggedIn ? (
           <div className="text-white w-full">
             {loading ? (
-              <p className="mt-4 text-white">Loading transactions...</p>
+              <p className="mt-4 text-center text-white">Loading transactions...</p>
             ) : (
-              <div className="mt-4 space-y-2">
-                {transactions.length > 0 ? (
-                  transactions.map((transaction, idx) => (
-                    <div
-                      key={idx}
-                      className="p-3 bg-gray-700 rounded-lg flex items-center justify-between text-sm sm:text-md text-white"
-                    >
-                      <span className="flex items-center justify-center w-8 h-8 mr-4">
-                        {transactionLogos[transaction.kind]}  
-                      </span>
-
-                      <span className="flex-[2] text-left font-bold">
-                        {`${transaction.kind} - ${transaction.action}`}
-                      </span>
-
-                      <span
-                        className={`flex-1 text-right font-bold ${transaction.amount > 0 ? 'text-green-500' : 'text-red-500'
-                          }`}
-                      >
-                        {transaction.amount > 0
-                          ? `+$${transaction.amount}`
-                          : `-$${Math.abs(transaction.amount)}`}
-                      </span>
-
-                      <span className="flex-1 text-right font-bold">${transaction.balance}</span>
-
-                      <span className="flex-1 text-right font-bold text-gray-300">
-                        {transaction.timestamp}
-                      </span>
-                    </div>
-                  ))
+              <>
+                {transactions.length === 0 ? (
+                  <p className="mt-4 text-center text-gray-400">No transactions found.</p>
                 ) : (
-                  <p className="mt-4 text-white">No transactions available.</p>
+                  <div className="mt-4 space-y-2">
+                    {transactions.map((transaction, idx) => (
+                      <div
+                        key={idx}
+                        className="p-4 bg-gray-700 rounded-lg text-xs sm:text-sm lg:text-md text-white cursor-pointer hover:bg-gray-600 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0"
+                        onClick={() => openTransactionModal(transaction)}
+                      >
+                        <div className="flex items-center justify-start space-x-2 flex-shrink-0">
+                          <span className="flex items-center justify-center w-6 sm:w-8 h-6 sm:h-8">
+                            {renderTransactionLogo(transaction)}
+                          </span>
+                          <span className="font-semibold">
+                            {`${transaction.kind} - ${transaction.action}`}
+                          </span>
+                        </div>
+
+                        <div className="flex flex-wrap justify-between sm:justify-end items-center sm:space-x-4 w-full">
+                          <span
+                            className={`font-bold ${transaction.amount > 0 ? 'text-green-500' : 'text-red-500'}`}
+                          >
+                            {transaction.amount > 0
+                              ? `+$${transaction.amount}`
+                              : `-$${Math.abs(transaction.amount)}`}
+                          </span>
+                          <span className="font-bold">${transaction.balance}</span>
+                          <span className="text-gray-300">{formatDate(transaction.timestamp)}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
-              </div>
+              </>
             )}
           </div>
         ) : (
           <div className="flex flex-col justify-center items-center bg-gray-900 p-8 space-y-6 rounded-lg">
             <h1 className="text-3xl font-bold text-red-600">Login Required</h1>
-            <p className="text-lg text-white">
-              You need to log in to view your transactions.
-            </p>
+            <p className="text-lg text-white">You need to log in to view your transactions.</p>
             <button
               className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg"
               onClick={openLoginModal}
             >
               Login
+            </button>
+          </div>
+        )}
+
+        {/* Pagination Controls */}
+        {transactionCount > 0 && (
+          <div className="mt-4 flex justify-center items-center space-x-4 ">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-3 py-2 rounded-lg ${currentPage === 1
+                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  : 'bg-gray-600 text-white hover:bg-gray-500'
+                }`}
+            >
+              Previous
+            </button>
+            <span className="text-white">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`px-3 py-2 rounded-lg ${currentPage === totalPages
+                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  : 'bg-gray-600 text-white hover:bg-gray-500'
+                }`}
+            >
+              Next
             </button>
           </div>
         )}
