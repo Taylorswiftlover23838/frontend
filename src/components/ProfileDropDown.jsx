@@ -17,7 +17,7 @@ export default function ProfileDropDown() {
 
   const handleLogout = async () => {
     try {
-      const response = await api.post("/logout");
+      const response = await api.post("/account/logout");
       toast.success(response.data.message);
       toggleProfileDropDown();
       setLoggedIn(false);

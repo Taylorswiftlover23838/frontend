@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../../components/header";
+import Header from '../../components/Header'
 import { GiPokerHand } from "react-icons/gi";
 
 export default function BlackJack() {

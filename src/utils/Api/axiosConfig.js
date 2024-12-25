@@ -2,7 +2,7 @@ import axios from "axios";
 import useAuthStore from "../ZustandStore/useAuthStore";
 
 const api = axios.create({
-  baseURL: "http://localhost:8020",
+  baseURL: "http://localhost:8020/api",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -11,7 +11,7 @@ const api = axios.create({
 
 const refreshToken = async () => {
   try {
-    const response = await api.post("/refreshtoken");
+    const response = await api.post("/auth/refreshtoken");
     console.log("refreshing token");
     const newAccessToken = response.data.accessToken;
     return newAccessToken;

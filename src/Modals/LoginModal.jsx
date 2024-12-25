@@ -17,7 +17,7 @@ const LoginModal = ({ closeModal }) => {
     const body = { emailOrUsername, password };
 
     try {
-      const response = await api.post("/login", body);
+      const response = await api.post("/account/login", body);
       const data = response.data;
 
       if (response.status === 200) {

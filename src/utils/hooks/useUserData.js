@@ -4,7 +4,7 @@ import { onMessage, offMessage } from '../socket';
 import api from "../Api/axiosConfig";
 
 const fetchUserData = async () => {
-  const response = await api.get('/userData');
+  const response = await api.get('/account/data/userData');
   return response.data.userData;
 };
 

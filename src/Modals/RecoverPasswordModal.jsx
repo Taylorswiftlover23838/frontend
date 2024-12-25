@@ -26,7 +26,7 @@ const RecoverPasswordModal = ({ closeModal }) => {
     if (!validateForm()) return;
 
     try {
-      const response = await api.post("/recoveryCode", body);
+      const response = await api.post("/account/recoveryCode", body);
       const data = response.data;
 
       if (response.status === 200) {

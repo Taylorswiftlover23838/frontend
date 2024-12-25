@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useAuthStore from '../../utils/ZustandStore/useAuthStore';
-import Header from '../../components/header';
+import Header from '../../components/Header'
 import { IoSettingsSharp } from 'react-icons/io5';
 import useModalStore from '../../utils/ZustandStore/useModalStore';
 import useDropdownStore from '../../utils/ZustandStore/useDropDownStore';
@@ -57,7 +57,7 @@ export default function Transactions() {
     const body = { transactionType, page };
     setLoading(true);
     try {
-      const response = await api.post('/transactionsData', body);
+      const response = await api.post('/account/data/transactionsData', body);
       if (response.data.transactions.length === 0) {
         console.log('No transactions found.');
       }

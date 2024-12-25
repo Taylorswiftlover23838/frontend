@@ -65,7 +65,7 @@ export default function ChatWindow() {
     if (data) {
       try {
         emitMessage("sendMessage", body);
-        await api.post("/sendMessage", body);
+        await api.post("/chat/sendMessage", body);
       } catch (err) {
         console.error("Failed to send message:", err);
       }

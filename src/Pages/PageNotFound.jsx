@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../components/header";
+import Header from  '../components/Header'
 import { IoMdCloseCircle } from "react-icons/io";
 
 export default function PageNotFound() {

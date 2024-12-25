@@ -13,7 +13,7 @@ const PaymentOptionsModal = ({ option, onClose }) => {
         const stripe = await loadStripe("pk_test_51QYejSF5mQZW1Wy5oBX8D2EUw6YEW6gbegoKt9PfWipespqo2VHtcU7cSw6KbiaEJf9TwlNktV41pXx5u9rlvRML00xNpbfnHs");
 
         try {
-            const response = await api.post("/create-checkout-session", { amount });
+            const response = await api.post("/stripe/create-checkout-session", { amount });
             const { id } = response.data;
 
             const result = await stripe.redirectToCheckout({

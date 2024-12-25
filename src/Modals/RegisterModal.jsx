@@ -38,7 +38,7 @@ const RegisterModal = ({ closeModal }) => {
     const body = { email, username, password };
 
     try {
-      const response = await api.post("/register", body);
+      const response = await api.post("/account/register", body);
       const data = response.data;
 
       if (response.status === 200) {

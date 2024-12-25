@@ -30,7 +30,7 @@ export default function ResetPasswordModal({ closeModal }) {
     if (!validateForm()) return;
 
     try {
-      const response = await api.post("/resetpassword", body);
+      const response = await api.post("/account/resetpassword", body);
       const data = response.data;
 
       if (response.status === 200) {

@@ -1,7 +1,7 @@
 import React from "react";
 import useUserData from "../../utils/hooks/useUserData";
 import useAuthStore from "../../utils/ZustandStore/useAuthStore";
-import Header from "../../components/header";
+import Header from '../../components/Header'
 import { IoSettingsSharp } from "react-icons/io5";
 import useModalStore from "../../utils/ZustandStore/useModalStore";
 
