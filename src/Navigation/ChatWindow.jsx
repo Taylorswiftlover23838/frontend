@@ -58,8 +58,8 @@ export default function ChatWindow() {
   }, [loggedIn]);
 
   const handleSendMessage = async () => {
-    const username = data.username;
-    const profile_image = data.profile_image;
+    const username = data?.username;
+    const profile_image = data?.avator.profile_image;
     const body = { messageInput, username, profile_image };
 
     if (data) {

@@ -9,6 +9,8 @@ import PromoCodeModal from "../Modals/PromoCodeModal";
 import CryptoModal from "../Modals/CryptoModal";
 import PaymentOptionsModal from "../Modals/PaymentOptionsModal";
 import TransactionModal from "../Modals/TransactionModal";
+import FairnessModal from "../Modals/FairnessModal";
+import RulesModal from "../Modals/RulesModal";
 
 export default function Modals() {
   const {
@@ -24,6 +26,8 @@ export default function Modals() {
     isCryptoModalOpen,
     isPaymentOptionsModalOpen,
     isTransactionModalOpen,
+    isFairnessModalOpen,
+    isRulesModalOpen,
 
     closeLoginModal,
     closeRegisterModal,
@@ -34,11 +38,13 @@ export default function Modals() {
     closeCryptoModal,
     closePaymentOptionsModal,
     closeTransactionModal,
+    closeFairnessModal,
+    closeRulesModal,
+
   } = useModalStore();
 
   return (
     <>
-      {/* Login and Register modals */}
       {isLoginModalOpen && <LoginModal closeModal={closeLoginModal} />}
       {isRegisterModalOpen && <RegisterModal closeModal={closeRegisterModal} />}
 
@@ -65,12 +71,19 @@ export default function Modals() {
         />
       )}
 
-      {/* Transaction Modal */}
       {isTransactionModalOpen && (
         <TransactionModal
           transaction={selectedTransaction}
           onClose={closeTransactionModal}
         />
+      )}
+
+      {isFairnessModalOpen && (
+        <FairnessModal closeModal={closeFairnessModal} />
+      )}
+
+      {isRulesModalOpen && (
+        <RulesModal closeModal={closeRulesModal} />
       )}
     </>
   );

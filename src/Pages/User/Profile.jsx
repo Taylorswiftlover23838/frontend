@@ -26,7 +26,7 @@ export default function Profile() {
           <>
             <div className="mb-6 text-center">
               <img
-                src={data?.profile_image}
+                src={data?.avator.profile_image}
                 alt="Profile"
                 className="w-32 h-32 rounded-full object-cover mx-auto"
               />
@@ -36,14 +36,25 @@ export default function Profile() {
             </div>
 
             {data && (
-              <div className="flex space-x-6">
-                <div className="p-4 border-2 border-gray-700 rounded-lg">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div className="p-4 border-2 border-gray-700 rounded-lg text-center">
                   <p className="text-lg text-white">
-                    <strong>Joined:</strong> {data.createdAt}
+                    <strong>Joined:</strong> {data?.createdAt}
+                  </p>
+                </div>
+                <div className="p-4 border-2 border-gray-700 rounded-lg text-center">
+                  <p className="text-lg text-white">
+                    <strong>Wagered:</strong> <span className="text-green-400">{data?.stats.totalWagered}</span> 
+                  </p>
+                </div>
+                <div className="p-4 border-2 border-gray-700 rounded-lg text-center">
+                  <p className="text-lg text-white">
+                    <strong>Total Bets:</strong> {data?.stats.totalBets}
                   </p>
                 </div>
               </div>
             )}
+
           </>
         ) : (
           <div className="flex flex-col justify-center items-center bg-gray-900 p-8 space-y-6 rounded-lg">

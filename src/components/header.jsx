@@ -63,7 +63,6 @@ export default function Header({ title, icon, links }) {
         )}
       </div>
 
-      {/* Icon Section */}
       <div className={`flex items-center ${links ? 'hidden sm:block' : ''} text-3xl sm:text-4xl md:text-5xl`}>
         {icon}
       </div>

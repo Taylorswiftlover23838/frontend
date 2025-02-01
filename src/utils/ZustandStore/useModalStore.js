@@ -10,9 +10,31 @@ const useModalStore = create((set) => ({
   isCryptoModalOpen: false,
   isPaymentOptionsModalOpen: false,
   isTransactionModalOpen: false,
+  isFairnessModalOpen: false,
+  isRulesModalOpen: false,
 
   selectedTransaction: null,
   selectedPaymentOption: null,
+
+  openRulesModal: () =>
+    set((state) => ({
+      isRulesModalOpen: !state.isRulesModalOpen,
+    })),
+
+  closeRulesModal: () =>
+    set((state) => ({
+      isRulesModalOpen: !state.isRulesModalOpen,
+    })),
+
+  openFairnessModal: () =>
+    set((state) => ({
+      isFairnessModalOpen: !state.isFairnessModalOpen,
+    })),
+
+  closeFairnessModal: () =>
+    set((state) => ({
+      isFairnessModalOpen: !state.isFairnessModalOpen,
+    })),
 
   openLoginModal: () =>
     set((state) => ({
@@ -111,7 +133,7 @@ const useModalStore = create((set) => ({
       isTransactionModalOpen: true,
       selectedTransaction: transaction,
     }),
-    
+
   closeTransactionModal: () =>
     set({
       isTransactionModalOpen: false,

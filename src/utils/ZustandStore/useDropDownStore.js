@@ -10,8 +10,6 @@ const useDropdownStore = create((set) => ({
     set((state) => {
       return {
         isProfileDropDownOpen: !state.isProfileDropDownOpen,
-        transactionDropdownOpen: false,
-        linksDropdownOpen: false, 
       };
     }),
 
@@ -19,8 +17,6 @@ const useDropdownStore = create((set) => ({
     set((state) => {
       return {
         transactionDropdownOpen: !state.transactionDropdownOpen,
-        linksDropdownOpen: false, 
-        isProfileDropDownOpen: false, 
       };
     }),
 
@@ -28,8 +24,6 @@ const useDropdownStore = create((set) => ({
     set((state) => {
       return {
         linksDropdownOpen: !state.linksDropdownOpen,
-        transactionDropdownOpen: false, 
-        isProfileDropDownOpen: false, 
       };
     }),
 

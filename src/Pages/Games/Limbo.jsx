@@ -1,13 +1,14 @@
 import React from "react";
 import Header from '../../components/Header'
-import { TbCoinFilled } from "react-icons/tb";
+import { HiMiniRocketLaunch } from "react-icons/hi2";
 
-export default function CoinFlip() {
+export default function Limbo() {
   return (
     <>
       <div className="min-h-screen bg-gray-900 px-4 sm:px-6"> 
+
         <div className="w-full mt-6">
-          <Header title="CoinFlip" icon={<TbCoinFilled />} />
+          <Header title="Limbo" icon={<HiMiniRocketLaunch />} />
         </div>
 
 

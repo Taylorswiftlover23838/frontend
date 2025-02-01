@@ -74,7 +74,7 @@ export default function NavBar() {
             <>
               {data && (
                 <img
-                  src={data.profile_image}
+                  src={data?.avator.profile_image}
                   alt="profile_image"
                   className="h-12 cursor-pointer"
                   onClick={toggleProfileDropDown}

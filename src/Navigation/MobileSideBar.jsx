@@ -1,4 +1,3 @@
-// MobileFooter.js
 import React from "react";
 import { CgMenuRightAlt } from "react-icons/cg";
 import { IoMdChatboxes } from "react-icons/io";

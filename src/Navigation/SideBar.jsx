@@ -3,8 +3,9 @@ import { NavLink } from "react-router-dom";
 import { IoIosHome } from "react-icons/io";
 import { CgMenuRightAlt } from "react-icons/cg";
 import { FaDiceFive } from "react-icons/fa6";
-import { TbCoinFilled } from "react-icons/tb";
 import { GiPokerHand } from "react-icons/gi";
+import { HiMiniRocketLaunch } from "react-icons/hi2";
+import { FaBomb } from "react-icons/fa6";
 import useChatStore from "../utils/ZustandStore/useChatStore";
 import useMobileStore from "../utils/ZustandStore/useMobileStore";
 import useSideBarStore from "../utils/ZustandStore/useSideBarStore";
@@ -22,9 +23,10 @@ function SideBar({ children }) {
 
   const menuItem = [
     { path: "/", name: "Home", icon: <IoIosHome /> },
-    { path: "/coinflip", name: "CoinFlip", icon: <TbCoinFilled /> },
     { path: "/dice", name: "Dice", icon: <FaDiceFive /> },
-    { path: "/blackjack", name: "BlackJack", icon: <GiPokerHand/>}
+    { path: "/blackjack", name: "BlackJack", icon: <GiPokerHand/>},
+    { path: "/mines", name: "Mines", icon: <FaBomb/>},
+    { path: "/limbo", name: "Limbo", icon: <HiMiniRocketLaunch/>,}
   ];
 
   return (

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import useAuthStore from '../../utils/ZustandStore/useAuthStore';
-import Header from '../../components/Header'
+import Header from '../../components/Header';
 import { IoSettingsSharp } from 'react-icons/io5';
 import useModalStore from '../../utils/ZustandStore/useModalStore';
 import useDropdownStore from '../../utils/ZustandStore/useDropDownStore';
 import api from '../../utils/Api/axiosConfig';
 import 'react-tabs/style/react-tabs.css';
 import { FaDiceFive } from 'react-icons/fa6';
-import { TbCoinFilled } from 'react-icons/tb';
+import { MdOutlineAttachMoney } from "react-icons/md";
+import { HiMiniRocketLaunch } from "react-icons/hi2";
+import { FaBomb } from "react-icons/fa6";
 import { GiPokerHand } from 'react-icons/gi';
 import { TbSpeakerphone } from 'react-icons/tb';
 import { FaCreditCard } from 'react-icons/fa6';
@@ -19,14 +21,15 @@ import { FaCcAmazonPay } from "react-icons/fa";
 const transactionLogos = {
   Dice: <FaDiceFive className="text-xl" />,
   Blackjack: <GiPokerHand className="text-xl" />,
-  CoinFlip: <TbCoinFilled className="text-xl" />,
   Promotion: <TbSpeakerphone className="text-xl" />,
+  Mines: <FaBomb className="text-xl" />,
+  Limbo: <HiMiniRocketLaunch className="text-xl" />,
   Purchase: {
     card: <FaCreditCard className="text-xl" />,
     amazon_pay: <FaCcAmazonPay className="text-xl" />,
     wechat_pay: <BsWechat className="text-xl" />,
-    cashapp: <SiCashapp className="text-xl" />
-  }
+    cashapp: <SiCashapp className="text-xl" />,
+  },
 };
 
 export default function Transactions() {
@@ -50,7 +53,7 @@ export default function Transactions() {
     { linkText: 'Transactions', linkUrl: '/profile/transactions' },
   ];
 
-  const transactionTypes = ['All', 'Dice', 'Blackjack', 'CoinFlip', 'Promotion', 'Purchase'];
+  const transactionTypes = ['All', 'Dice', 'Blackjack', 'Mines', 'Limbo', 'Promotion', 'Purchase'];
   const limit = 10;
 
   const fetchTransactions = async (transactionType, page) => {
@@ -79,7 +82,7 @@ export default function Transactions() {
 
   const handleTransactionTypeSelect = (type) => {
     setSelectedTransaction(type);
-    setCurrentPage(1); 
+    setCurrentPage(1);
     toggleTransactionDropdown();
   };
 
@@ -99,7 +102,6 @@ export default function Transactions() {
     <div className="min-h-screen bg-gray-900 px-4 sm:px-6">
       <Header title="Profile" icon={<IoSettingsSharp />} links={links} />
 
-      {/* Dropdown Section */}
       <div className="w-full max-w-screen-lg mx-auto mt-6 p-6 bg-gray-800 border-2 border-gray-700 rounded-lg flex justify-start items-center">
         <div className="relative w-40">
           <button
@@ -126,7 +128,6 @@ export default function Transactions() {
         </div>
       </div>
 
-      {/* Content Section */}
       <div className="w-full max-w-screen-lg mx-auto mt-4 p-6 flex flex-col border-2 border-gray-700 rounded-lg bg-gray-800">
         {loggedIn ? (
           <div className="text-white w-full">
@@ -155,13 +156,27 @@ export default function Transactions() {
 
                         <div className="flex flex-wrap justify-between sm:justify-end items-center sm:space-x-4 w-full">
                           <span
-                            className={`font-bold ${transaction.amount > 0 ? 'text-green-500' : 'text-red-500'}`}
+                            className={`font-bold flex items-center ${transaction.amount > 0 ? 'text-green-500' : 'text-red-500'
+                              }`}
                           >
-                            {transaction.amount > 0
-                              ? `+$${transaction.amount}`
-                              : `-$${Math.abs(transaction.amount)}`}
+                            {transaction.amount > 0 ? (
+                              <>
+                                <MdOutlineAttachMoney className='text-sm sm:text-xl' />
+                                <span>+{transaction.amount}</span>
+                              </>
+                            ) : (
+                              <>
+                                <MdOutlineAttachMoney />
+                                <span>-{Math.abs(transaction.amount)}</span>
+                              </>
+                            )}
                           </span>
-                          <span className="font-bold">${transaction.balance}</span>
+
+                          <span className="font-bold flex items-center text-white">
+                            <MdOutlineAttachMoney className='text-sm sm:text-xl' />
+                            <span>{transaction.balance}</span>
+                          </span>
+
                           <span className="text-gray-300">{formatDate(transaction.timestamp)}</span>
                         </div>
                       </div>
@@ -184,15 +199,14 @@ export default function Transactions() {
           </div>
         )}
 
-        {/* Pagination Controls */}
         {transactionCount > 0 && (
           <div className="mt-4 flex justify-center items-center space-x-4 ">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
               className={`px-3 py-2 rounded-lg ${currentPage === 1
-                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                  : 'bg-gray-600 text-white hover:bg-gray-500'
+                ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                : 'bg-gray-600 text-white hover:bg-gray-500'
                 }`}
             >
               Previous
@@ -204,8 +218,8 @@ export default function Transactions() {
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
               className={`px-3 py-2 rounded-lg ${currentPage === totalPages
-                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                  : 'bg-gray-600 text-white hover:bg-gray-500'
+                ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                : 'bg-gray-600 text-white hover:bg-gray-500'
                 }`}
             >
               Next
