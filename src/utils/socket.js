@@ -1,4 +1,3 @@
-
 import io from "socket.io-client";
 
 const server = "http://localhost:8020";
@@ -14,8 +13,8 @@ export const onMessage = (event, callback) => {
   socket.on(event, callback);
 };
 
-export const offMessage = (event) => {
-  socket.off(event);
+export const offMessage = (event, callback) => {
+  socket.off(event, callback);
 };
 
 export default socket;

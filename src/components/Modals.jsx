@@ -48,7 +48,6 @@ export default function Modals() {
       {isLoginModalOpen && <LoginModal closeModal={closeLoginModal} />}
       {isRegisterModalOpen && <RegisterModal closeModal={closeRegisterModal} />}
 
-      {/* Forgot Password Modals */}
       {isRecoverPasswordModalOpen && (
         <RecoverPasswordModal closeModal={closeRecoverPasswordModal} />
       )}
@@ -57,7 +56,6 @@ export default function Modals() {
         <ResetPasswordModal closeModal={closeResetPasswordModal} />
       )}
 
-      {/* Wallet Modals */}
       {isWalletModalOpen && <WalletModal closeModal={closeWalletModal} />}
       {isPromoCodeModalOpen && (
         <PromoCodeModal closeModal={closePromoCodeModal} />

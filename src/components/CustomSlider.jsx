@@ -1,7 +1,11 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useState, useEffect } from "react";
+import { GiPerspectiveDiceSixFacesTwo } from "react-icons/gi";
+import { motion } from "framer-motion";
 
-const CustomSlider = ({ value, onChange, rollType }) => {
+const CustomSlider = ({ value, onChange, rollType, latestRoll }) => {
   const sliderRef = useRef(null);
+  const audioRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const minValue = rollType === "over" ? 7 : 1;
   const maxValue = rollType === "over" ? 99 : 93;
@@ -10,43 +14,47 @@ const CustomSlider = ({ value, onChange, rollType }) => {
     (clientX) => {
       const rect = sliderRef.current.getBoundingClientRect();
       const percentage = (clientX - rect.left) / rect.width;
-      const newValue = Math.max(
-        minValue,
-        Math.min(maxValue, Math.round(percentage * 100))
-      );
+      const newValue = Math.max(minValue, Math.min(maxValue, Math.round(percentage * 100)));
       onChange(newValue);
     },
     [minValue, maxValue, onChange]
   );
 
-  const handleInteractionStart = useCallback(
-    (event) => {
-      event.preventDefault();
-      const clientX =
-        event.type === "touchstart" ? event.touches[0].clientX : event.clientX;
-      handleSliderInteraction(clientX);
+  const handleInteractionStart = useCallback((event) => {
+    event.preventDefault();
+    setIsDragging(true);
 
-      const handleMove = (e) => {
-        e.preventDefault();
-        handleSliderInteraction(
-          e.type === "touchmove" ? e.touches[0].clientX : e.clientX
-        );
-      };
+    if (audioRef.current) {
+      audioRef.current.loop = true;
+      audioRef.current.play().catch(() => { });
+    }
 
-      const handleEnd = () => {
-        document.removeEventListener("mousemove", handleMove);
-        document.removeEventListener("touchmove", handleMove);
-        document.removeEventListener("mouseup", handleEnd);
-        document.removeEventListener("touchend", handleEnd);
-      };
+    const clientX = event.type === "touchstart" ? event.touches[0].clientX : event.clientX;
+    handleSliderInteraction(clientX);
 
-      document.addEventListener("mousemove", handleMove);
-      document.addEventListener("touchmove", handleMove);
-      document.addEventListener("mouseup", handleEnd);
-      document.addEventListener("touchend", handleEnd);
-    },
-    [handleSliderInteraction]
-  );
+    const handleMove = (e) => {
+      e.preventDefault();
+      handleSliderInteraction(e.type === "touchmove" ? e.touches[0].clientX : e.clientX);
+    };
+
+    const handleEnd = () => {
+      setIsDragging(false);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+
+      document.removeEventListener("mousemove", handleMove);
+      document.removeEventListener("touchmove", handleMove);
+      document.removeEventListener("mouseup", handleEnd);
+      document.removeEventListener("touchend", handleEnd);
+    };
+
+    document.addEventListener("mousemove", handleMove);
+    document.addEventListener("touchmove", handleMove);
+    document.addEventListener("mouseup", handleEnd);
+    document.addEventListener("touchend", handleEnd);
+  }, [handleSliderInteraction]);
 
   const overColor = "rgb(204, 74, 56)";
   const underColor = "rgb(35, 201, 121)";
@@ -57,17 +65,45 @@ const CustomSlider = ({ value, onChange, rollType }) => {
     ${primaryColor} 0% ${value}%, 
     ${secondaryColor} ${value}% 100%)`;
 
+  const rollPosition = latestRoll !== null ? `${latestRoll}%` : "50%";
+
+  useEffect(() => {
+    return () => {
+      document.removeEventListener("mousemove", handleInteractionStart);
+      document.removeEventListener("touchmove", handleInteractionStart);
+    };
+  }, [handleInteractionStart]);
+
   return (
-    <div className="w-full">
+    <div className="w-full relative">
+      <audio ref={audioRef} src="/Audios/slider-tick.mp3" preload="auto" />
+
+      {latestRoll !== null && (
+        <motion.div
+          className="absolute bottom-8 text-5xl text-white"
+          style={{ left: `calc(${rollPosition} - 12px)` }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0, left: `calc(${rollPosition} - 12px)` }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
+          <GiPerspectiveDiceSixFacesTwo />
+        </motion.div>
+      )}
+
       <div
         ref={sliderRef}
+        role="slider"
+        aria-valuenow={value}
+        aria-valuemin={minValue}
+        aria-valuemax={maxValue}
+        aria-label="Custom slider"
         className="w-full h-4 rounded-md cursor-pointer relative"
         onMouseDown={handleInteractionStart}
         onTouchStart={handleInteractionStart}
         style={{ background: sliderBackground }}
       >
         <div
-          className="absolute top-0 h-full w-1 bg-white"
+          className="absolute top-0 h-full w-1 scale-150 bg-white"
           style={{ left: `calc(${value}% - 2px)` }}
         />
       </div>

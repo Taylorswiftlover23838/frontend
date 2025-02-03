@@ -21,8 +21,6 @@ const WebSocketListener = () => {
       offMessage("userDataUpdate", handleUserDataUpdate);
     };
   }, [queryClient]);
-
-  return null; 
 };
 
 export default WebSocketListener;

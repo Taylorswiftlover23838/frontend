@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Header from '../../components/Header';
 import { GiClover } from "react-icons/gi";
 import useAuthStore from '../../utils/ZustandStore/useAuthStore';
@@ -16,21 +16,17 @@ function DiceFairness() {
     { linkText: "Limbo", linkUrl: "/fairness/limbo" },
   ];
 
-  const [historyData, setHistoryData] = useState({});
-
-
   const fetchHistory = async () => {
     try {
       const response = await api.post('/dice/dice-history');
-      setHistoryData(response.data);
+      console.log(response.data)
     } catch (err) {
       console.error('Error fetching history:', err);
-    } 
+    }
   };
 
   useEffect(() => {
     if (loggedIn) {
-      setHistoryData({});
       fetchHistory();
     }
   }, [loggedIn]);
@@ -66,14 +62,23 @@ function DiceFairness() {
           </div>
 
           {loggedIn ? (
-            <div className="p-4 bg-gray-900 text-white rounded-lg flex items-center justify-between">
-              <p className='text-green-400'>
-                Change Client Seed
-              </p>
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none" onClick={openFairnessModal}>
-                Change
-              </button>
-            </div>
+            <>
+              <div className="p-4 bg-gray-900 text-white rounded-lg flex items-center justify-between">
+                <p className='text-green-400'>
+                  Change Client Seed
+                </p>
+                <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none" onClick={openFairnessModal}>
+                  Change
+                </button>
+              </div>
+              <div className="p-4 bg-gray-900 rounded-lg flex items-center justify-between">
+                <p className="text-white">Show Rolls for:</p>
+                <input
+                  type="date"
+                  className="px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none"
+                />
+              </div>
+            </>
           ) : (
             <div className="p-4 bg-gray-900 text-white rounded-lg flex flex-col items-center justify-center space-y-6">
               <p className='text-red-500'>Please log in to replicate your past games</p>
