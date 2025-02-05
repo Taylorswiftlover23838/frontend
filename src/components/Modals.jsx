@@ -9,7 +9,6 @@ import PromoCodeModal from "../Modals/PromoCodeModal";
 import CryptoModal from "../Modals/CryptoModal";
 import PaymentOptionsModal from "../Modals/PaymentOptionsModal";
 import TransactionModal from "../Modals/TransactionModal";
-import FairnessModal from "../Modals/FairnessModal";
 import RulesModal from "../Modals/RulesModal";
 
 export default function Modals() {
@@ -26,7 +25,6 @@ export default function Modals() {
     isCryptoModalOpen,
     isPaymentOptionsModalOpen,
     isTransactionModalOpen,
-    isFairnessModalOpen,
     isRulesModalOpen,
 
     closeLoginModal,
@@ -38,7 +36,6 @@ export default function Modals() {
     closeCryptoModal,
     closePaymentOptionsModal,
     closeTransactionModal,
-    closeFairnessModal,
     closeRulesModal,
 
   } = useModalStore();
@@ -74,10 +71,6 @@ export default function Modals() {
           transaction={selectedTransaction}
           onClose={closeTransactionModal}
         />
-      )}
-
-      {isFairnessModalOpen && (
-        <FairnessModal closeModal={closeFairnessModal} />
       )}
 
       {isRulesModalOpen && (

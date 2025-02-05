@@ -3,7 +3,7 @@ import { ImExit } from "react-icons/im";
 import api from '../utils/Api/axiosConfig';
 import useAuthStore from '../utils/ZustandStore/useAuthStore';
 
-function FairnessModal({ closeModal }) {
+function FairnessModal({ closeModal, onSeedUpdate }) {
     const { loggedIn } = useAuthStore();
     const [seedData, setSeedData] = useState(null);
     const [newClientSeed, setNewClientSeed] = useState("");
@@ -22,6 +22,7 @@ function FairnessModal({ closeModal }) {
         try {
             const response = await api.post('/fairness/update-seed', body);
             setSeedData(response.data);
+            onSeedUpdate(); 
         } catch (err) {
             console.error('Error updating seed:', err);
         }
@@ -30,7 +31,6 @@ function FairnessModal({ closeModal }) {
     useEffect(() => {
         if (loggedIn) {
             fetchSeedData();
-
         }
     }, [loggedIn]);
 
@@ -72,7 +72,7 @@ function FairnessModal({ closeModal }) {
                     </div>
                     <button
                         className="bg-blue-500 text-white font-medium py-2 px-4 rounded-lg w-full hover:bg-blue-600 transition-colors"
-                        onClick={updateSeedData} 
+                        onClick={updateSeedData}
                     >
                         Change
                     </button>

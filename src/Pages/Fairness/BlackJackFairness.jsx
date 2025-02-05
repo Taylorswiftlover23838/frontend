@@ -4,10 +4,11 @@ import { GiClover } from "react-icons/gi";
 import useAuthStore from '../../utils/ZustandStore/useAuthStore';
 import api from '../../utils/Api/axiosConfig';
 import useModalStore from '../../utils/ZustandStore/useModalStore';
+import FairnessModal from '../../Modals/FairnessModal';
 
 function BlackJackFairness() {
   const { loggedIn } = useAuthStore();
-  const { openFairnessModal, openLoginModal } = useModalStore();
+  const { openFairnessModal, openLoginModal, isFairnessModalOpen, closeFairnessModal } = useModalStore();
 
   const links = [
     { linkText: "Dice", linkUrl: "/fairness/dice" },
@@ -16,29 +17,30 @@ function BlackJackFairness() {
     { linkText: "Limbo", linkUrl: "/fairness/limbo" },
   ];
 
-  const [date, setDate] = useState("");
-
-  useEffect(() => {
-    const estDate = new Date().toLocaleDateString("en-CA", {
-      timeZone: "America/New_York",
-    });
-    setDate(estDate);
-  }, []);
+  const [blackjackHistory, setHistoryData] = useState([]);
+  const [date, setDate] = useState(new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" }));
+  const [clientSeed, setClientSeed] = useState('');
+  const [seedUpdated, setSeedUpdated] = useState(false);
 
   const fetchHistory = async () => {
     try {
       const response = await api.post('/blackjack/blackjack-history');
-      console.log(response.data);
+      setHistoryData(response.data.rolls);
+      setClientSeed(response.data.clientSeed);
     } catch (err) {
       console.error('Error fetching history:', err);
-    } 
+    }
+  };
+
+  const handleSeedUpdate = () => {
+    setSeedUpdated(prev => !prev);
   };
 
   useEffect(() => {
     if (loggedIn) {
       fetchHistory();
     }
-  }, [loggedIn]);
+  }, [loggedIn, date, seedUpdated]);
 
   return (
     <>
@@ -73,8 +75,8 @@ function BlackJackFairness() {
           {loggedIn ? (
             <>
               <div className="p-4 bg-gray-900 text-white rounded-lg flex items-center justify-between">
-                <p className='text-green-400'>
-                  Change Client Seed
+                <p className=''>
+                  Current Client Seed: <span className='text-green-400'>{clientSeed}</span>
                 </p>
                 <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none" onClick={openFairnessModal}>
                   Change
@@ -89,6 +91,14 @@ function BlackJackFairness() {
                   onChange={(e) => setDate(e.target.value)}
                 />
               </div>
+              {blackjackHistory.length > 0 ? (
+                <>
+                </>
+              ) : (
+                <div className="p-4 bg-gray-900 text-white rounded-lg">
+                  <p>No blackJack history available. Start rolling!</p>
+                </div>
+              )}
             </>
           ) : (
             <div className="p-4 bg-gray-900 text-white rounded-lg flex flex-col items-center justify-center space-y-6">
@@ -103,6 +113,8 @@ function BlackJackFairness() {
           )}
         </div>
       </div>
+
+      {isFairnessModalOpen && <FairnessModal closeModal={closeFairnessModal} onSeedUpdate={handleSeedUpdate} />}
     </>
   );
 }
