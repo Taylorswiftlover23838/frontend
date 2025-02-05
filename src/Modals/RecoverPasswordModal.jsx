@@ -3,12 +3,12 @@ import api from "../utils/Api/axiosConfig";
 import { ImExit } from "react-icons/im";
 import { toast } from "react-hot-toast";
 import useModalStore from "../utils/ZustandStore/useModalStore";
+import Spinner from "../components/Spinner";
 
 const RecoverPasswordModal = ({ closeModal }) => {
   const [email, setEmail] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const { openResetPasswordModal } = useModalStore();
-
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -25,6 +25,8 @@ const RecoverPasswordModal = ({ closeModal }) => {
 
     if (!validateForm()) return;
 
+    setLoading(true); 
+
     try {
       const response = await api.post("/account/recoveryCode", body);
       const data = response.data;
@@ -37,6 +39,8 @@ const RecoverPasswordModal = ({ closeModal }) => {
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred.");
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -51,15 +55,10 @@ const RecoverPasswordModal = ({ closeModal }) => {
             <ImExit />
           </button>
 
-          <h2 className="text-2xl font-semibold mb-4 text-black">
-            Recover Password
-          </h2>
+          <h2 className="text-2xl font-semibold mb-4 text-black">Recover Password</h2>
           <form>
             <div className="mb-6">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-black"
-              >
+              <label htmlFor="email" className="block text-sm font-medium text-black">
                 E-mail
               </label>
               <input
@@ -87,11 +86,18 @@ const RecoverPasswordModal = ({ closeModal }) => {
                   e.preventDefault();
                   sendRecoveryCode();
                 }}
+                disabled={loading} 
               >
                 Send Code
               </button>
             </div>
           </form>
+
+          {loading && (
+            <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-20">
+              <Spinner />
+            </div>
+          )}
         </div>
       </div>
     </>

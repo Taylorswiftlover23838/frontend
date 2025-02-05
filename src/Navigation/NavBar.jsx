@@ -27,7 +27,7 @@ export default function NavBar() {
     <nav className="bg-gray-800 text-white fixed w-full h-20 z-50">
       <div className="mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-full relative">
         <Link to="/" className="flex items-center cursor-pointer absolute left-0">
-          <img src={logo} alt="logo" className="sm:h-14 lg:h-16 hidden sm:block" />
+          <img src={logo} alt="logo" className="sm:h-16 lg:h-20 hidden sm:block" />
           <img src={logoMark} alt="logo" className="h-14 block sm:hidden" />
         </Link>
 

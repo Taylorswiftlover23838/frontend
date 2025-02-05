@@ -10,6 +10,7 @@ import CryptoModal from "../Modals/CryptoModal";
 import PaymentOptionsModal from "../Modals/PaymentOptionsModal";
 import TransactionModal from "../Modals/TransactionModal";
 import RulesModal from "../Modals/RulesModal";
+import SupportModal from "../Modals/SupportModal";
 
 export default function Modals() {
   const {
@@ -26,6 +27,7 @@ export default function Modals() {
     isPaymentOptionsModalOpen,
     isTransactionModalOpen,
     isRulesModalOpen,
+    isSupportModalOpen,
 
     closeLoginModal,
     closeRegisterModal,
@@ -37,6 +39,7 @@ export default function Modals() {
     closePaymentOptionsModal,
     closeTransactionModal,
     closeRulesModal,
+    closeSupportModal
 
   } = useModalStore();
 
@@ -75,6 +78,10 @@ export default function Modals() {
 
       {isRulesModalOpen && (
         <RulesModal closeModal={closeRulesModal} />
+      )}
+
+      {isSupportModalOpen && (
+        <SupportModal closeModal={closeSupportModal}/>
       )}
     </>
   );

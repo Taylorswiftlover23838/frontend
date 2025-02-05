@@ -5,6 +5,7 @@ import useAuthStore from '../../utils/ZustandStore/useAuthStore';
 import api from '../../utils/Api/axiosConfig';
 import useModalStore from '../../utils/ZustandStore/useModalStore';
 import FairnessModal from '../../Modals/FairnessModal';
+import Spinner from '../../components/Spinner';
 
 function DiceFairness() {
   const { loggedIn } = useAuthStore();
@@ -19,29 +20,33 @@ function DiceFairness() {
 
   const [diceHistory, setHistoryData] = useState([]);
   const [date, setDate] = useState(new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" }));
-  const [clientSeed, setClientSeed] = useState('');  
+  const [clientSeed, setClientSeed] = useState('');
   const [seedUpdated, setSeedUpdated] = useState(false);
+  const [loading, setLoading] = useState(false); 
 
   const fetchHistory = async () => {
     const body = { date };
+    setLoading(true); 
     try {
       const response = await api.post('/dice/dice-history', body);
       setHistoryData(response.data.rolls);
-      setClientSeed(response.data.clientSeed); 
+      setClientSeed(response.data.clientSeed);
     } catch (err) {
       console.error('Error fetching history:', err);
+    } finally {
+      setLoading(false); 
     }
   };
 
   const handleSeedUpdate = () => {
-    setSeedUpdated(prev => !prev);  
+    setSeedUpdated(prev => !prev);
   };
 
   useEffect(() => {
     if (loggedIn) {
       fetchHistory();
     }
-  }, [loggedIn, date, seedUpdated]);  
+  }, [loggedIn, date, seedUpdated]);
 
   return (
     <>
@@ -92,39 +97,47 @@ function DiceFairness() {
                   onChange={(e) => setDate(e.target.value)}
                 />
               </div>
-              {diceHistory.length > 0 ? (
-                <div className="p-4 bg-gray-900 text-white rounded-lg">
-                  <h2 className="text-lg font-bold mb-4">Dice History</h2>
-                  <table className="w-full text-left table-auto border-collapse border border-gray-700">
-                    <thead>
-                      <tr className="bg-gray-800 text-white">
-                        <th className="p-2 border border-gray-700">Roll</th>
-                        <th className="p-2 border border-gray-700">Client Seed</th>
-                        <th className="p-2 border border-gray-700">Server Seed</th>
-                        <th className="p-2 border border-gray-700">Nonce</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {diceHistory.map((entry, index) => (
-                        <tr key={index} className="hover:bg-gray-700">
-                          <td className="p-2 border border-gray-700">{entry.roll}</td>
-                          <td className="p-2 border border-gray-700">{entry.fairness.clientSeed}</td>
-                          <td
-                            className={`p-2 border border-gray-700 ${entry.fairness.active ? "text-purple-500" : "text-white"
-                              }`}
-                          >
-                            {entry.fairness.serverSeed}
-                          </td>
-                          <td className="p-2 border border-gray-700">{entry.nonce}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+              {loading ? (
+                <div className="p-4 bg-gray-900 text-white rounded-lg flex justify-center items-center">
+                  <Spinner />
                 </div>
               ) : (
-                <div className="p-4 bg-gray-900 text-white rounded-lg">
-                  <p>No dice history available. Start rolling!</p>
-                </div>
+                <>
+                  {diceHistory.length > 0 ? (
+                    <div className="p-4 bg-gray-900 text-white rounded-lg">
+                      <h2 className="text-lg font-bold mb-4">Dice History</h2>
+                      <table className="w-full text-left table-auto border-collapse border border-gray-700">
+                        <thead>
+                          <tr className="bg-gray-800 text-white">
+                            <th className="p-2 border border-gray-700">Roll</th>
+                            <th className="p-2 border border-gray-700">Client Seed</th>
+                            <th className="p-2 border border-gray-700">Server Seed</th>
+                            <th className="p-2 border border-gray-700">Nonce</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {diceHistory.map((entry, index) => (
+                            <tr key={index} className="hover:bg-gray-700">
+                              <td className="p-2 border border-gray-700">{entry?.roll}</td>
+                              <td className="p-2 border border-gray-700">{entry?.fairness?.clientSeed}</td>
+                              <td
+                                className={`p-2 border border-gray-700 ${entry?.fairness.active ? "text-purple-500" : "text-white"
+                                  }`}
+                              >
+                                {entry?.fairness?.serverSeed}
+                              </td>
+                              <td className="p-2 border border-gray-700">{entry?.nonce}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <div className="p-4 bg-gray-900 text-white rounded-lg">
+                      <p>No dice history available. Start rolling!</p>
+                    </div>
+                  )}
+                </>
               )}
             </>
           ) : (
@@ -140,6 +153,12 @@ function DiceFairness() {
           )}
         </div>
       </div>
+
+      {loading && (
+        <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-20">
+          <Spinner />
+        </div>
+      )}
 
       {isFairnessModalOpen && <FairnessModal closeModal={closeFairnessModal} onSeedUpdate={handleSeedUpdate} />}
     </>

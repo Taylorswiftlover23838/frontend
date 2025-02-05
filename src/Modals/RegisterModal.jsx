@@ -3,6 +3,7 @@ import { ImExit } from "react-icons/im";
 import { toast } from "react-hot-toast";
 import useAuthStore from "../utils/ZustandStore/useAuthStore";
 import api from "../utils/Api/axiosConfig";
+import Spinner from "../components/Spinner"; 
 
 const RegisterModal = ({ closeModal }) => {
   const { setLoggedIn } = useAuthStore();
@@ -11,6 +12,7 @@ const RegisterModal = ({ closeModal }) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); 
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validateUsername = (username) => username.length >= 3;
@@ -37,6 +39,8 @@ const RegisterModal = ({ closeModal }) => {
 
     const body = { email, username, password };
 
+    setLoading(true); 
+
     try {
       const response = await api.post("/account/register", body);
       const data = response.data;
@@ -51,6 +55,8 @@ const RegisterModal = ({ closeModal }) => {
       }
     } catch (error) {
       toast.error(error.response?.data?.message);
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -134,12 +140,20 @@ const RegisterModal = ({ closeModal }) => {
                 type="button"
                 onClick={registerUser}
                 className="w-1/2 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                disabled={loading} 
               >
-                Register
+                {loading ? <Spinner /> : "Register"} 
               </button>
             </div>
           </form>
         </div>
+
+
+        {loading && (
+          <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-20">
+            <Spinner />
+          </div>
+        )}
       </div>
     </>
   );

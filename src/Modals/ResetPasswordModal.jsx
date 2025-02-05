@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import { ImExit } from "react-icons/im";
 import { toast } from "react-hot-toast";
 import api from "../utils/Api/axiosConfig";
+import { useNavigate } from "react-router-dom"; 
+import Spinner from "../components/Spinner"; 
 
 export default function ResetPasswordModal({ closeModal }) {
   const [recoveryCode, setRecoveryCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); 
 
   const validateForm = () => {
     if (!recoveryCode) {
@@ -29,6 +33,8 @@ export default function ResetPasswordModal({ closeModal }) {
 
     if (!validateForm()) return;
 
+    setLoading(true); 
+
     try {
       const response = await api.post("/account/resetpassword", body);
       const data = response.data;
@@ -36,11 +42,14 @@ export default function ResetPasswordModal({ closeModal }) {
       if (response.status === 200) {
         toast.success(data.message);
         closeModal();
+        navigate("/"); 
       } else {
         toast.error(data.message);
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred.");
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -126,12 +135,19 @@ export default function ResetPasswordModal({ closeModal }) {
                   e.preventDefault();
                   handleSubmit();
                 }}
+                disabled={loading} 
               >
-                Submit
+                {loading ? <Spinner /> : "Submit"}
               </button>
             </div>
           </form>
         </div>
+
+        {loading && (
+          <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-20">
+            <Spinner />
+          </div>
+        )}
       </div>
     </>
   );

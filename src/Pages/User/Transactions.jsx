@@ -13,10 +13,11 @@ import { FaBomb } from "react-icons/fa6";
 import { GiPokerHand } from 'react-icons/gi';
 import { TbSpeakerphone } from 'react-icons/tb';
 import { FaCreditCard } from 'react-icons/fa6';
-import { formatDate } from '../../utils/formatDate';
 import { BsWechat } from "react-icons/bs";
 import { SiCashapp } from "react-icons/si";
 import { FaCcAmazonPay } from "react-icons/fa";
+import Spinner from '../../components/Spinner';
+import { formatDate } from '../../utils/formatDate';
 
 const transactionLogos = {
   Dice: <FaDiceFive className="text-xl" />,
@@ -58,7 +59,7 @@ export default function Transactions() {
 
   const fetchTransactions = async (transactionType, page) => {
     const body = { transactionType, page };
-    setLoading(true);
+    setLoading(true); 
     try {
       const response = await api.post('/account/data/transactionsData', body);
       if (response.data.transactions.length === 0) {
@@ -69,7 +70,7 @@ export default function Transactions() {
     } catch (err) {
       console.error('Error fetching transactions:', err);
     } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   };
 
@@ -132,7 +133,9 @@ export default function Transactions() {
         {loggedIn ? (
           <div className="text-white w-full">
             {loading ? (
-              <p className="mt-4 text-center text-white">Loading transactions...</p>
+              <div className="mt-4 flex justify-center items-center">
+                <Spinner />
+              </div>
             ) : (
               <>
                 {transactions.length === 0 ? (
@@ -203,8 +206,8 @@ export default function Transactions() {
           <div className="mt-4 flex justify-center items-center space-x-4 ">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className={`px-3 py-2 rounded-lg ${currentPage === 1
+              disabled={currentPage === 1 || loading}
+              className={`px-3 py-2 rounded-lg ${currentPage === 1 || loading
                 ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
                 : 'bg-gray-600 text-white hover:bg-gray-500'
                 }`}
@@ -216,8 +219,8 @@ export default function Transactions() {
             </span>
             <button
               onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className={`px-3 py-2 rounded-lg ${currentPage === totalPages
+              disabled={currentPage === totalPages || loading}
+              className={`px-3 py-2 rounded-lg ${currentPage === totalPages || loading
                 ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
                 : 'bg-gray-600 text-white hover:bg-gray-500'
                 }`}
@@ -227,6 +230,12 @@ export default function Transactions() {
           </div>
         )}
       </div>
+
+      {loading && (
+        <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-20">
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 }

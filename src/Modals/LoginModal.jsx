@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 import useAuthStore from "../utils/ZustandStore/useAuthStore";
 import api from "../utils/Api/axiosConfig";
 import useModalStore from "../utils/ZustandStore/useModalStore";
+import Spinner from "../components/Spinner"; 
 
 const LoginModal = ({ closeModal }) => {
   const { setLoggedIn } = useAuthStore();
@@ -12,9 +13,12 @@ const LoginModal = ({ closeModal }) => {
 
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); 
 
   const loginUser = async () => {
     const body = { emailOrUsername, password };
+
+    setLoading(true);
 
     try {
       const response = await api.post("/account/login", body);
@@ -30,6 +34,8 @@ const LoginModal = ({ closeModal }) => {
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -89,21 +95,27 @@ const LoginModal = ({ closeModal }) => {
             >
               Forgot password?
             </button>
-
           </div>
 
           <button
             type="button"
             className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200"
             onClick={loginUser}
+            disabled={loading} 
           >
-            Login
+            {loading ? <Spinner /> : "Login"} 
           </button>
         </form>
 
         <p className="text-sm text-center text-gray-600 mt-4">
           Privacy Policy and Terms of Service apply.
         </p>
+
+        {loading && (
+          <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-20">
+            <Spinner />
+          </div>
+        )}
       </div>
     </div>
   );

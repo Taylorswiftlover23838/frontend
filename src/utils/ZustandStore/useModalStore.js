@@ -12,9 +12,20 @@ const useModalStore = create((set) => ({
   isTransactionModalOpen: false,
   isFairnessModalOpen: false,
   isRulesModalOpen: false,
+  isSupportModalOpen: false,
 
   selectedTransaction: null,
   selectedPaymentOption: null,
+
+  openSupportModal: () =>
+    set((state) => ({
+      isSupportModalOpen: !state.isSupportModalOpen,
+    })),
+
+  closeSupportModal: () =>
+    set((state) => ({
+      isSupportModalOpen: !state.isSupportModalOpen,
+    })),
 
   openRulesModal: () =>
     set((state) => ({

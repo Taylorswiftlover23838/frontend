@@ -3,8 +3,17 @@ import { BiLogoDiscordAlt } from "react-icons/bi";
 import { IoLogoInstagram } from "react-icons/io";
 import logo from "../utils/images/logo.png";
 import { Link } from "react-router-dom";
+import useModalStore from "../utils/ZustandStore/useModalStore";
 
 export default function Footer() {
+  const { openSupportModal } = useModalStore();
+
+  const handleLiveChatClick = () => {
+    if (window.$crisp) {
+      window.$crisp.push(["do", "chat:open"]);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center text-gray-200 py-8 px-4 md:px-6 pb-20 md:pb-8">
       <div className="w-full max-w-screen-lg mx-auto border-2 border-gray-700 rounded-lg p-4 md:p-6 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 bg-gray-800">
@@ -58,7 +67,16 @@ export default function Footer() {
         <div>
           <h3 className="font-bold mb-2 md:mb-4 text-center md:text-left">Support</h3>
           <ul className="text-xs md:text-sm space-y-1 md:space-y-2 text-center md:text-left">
-
+            <li>
+              <button onClick={openSupportModal} className="hover:underline text-blue-400">
+                Support
+              </button>
+            </li>
+            <li>
+              <button onClick={handleLiveChatClick} className="hover:underline text-blue-400">
+                Live Chat
+              </button>
+            </li>
           </ul>
         </div>
       </div>
