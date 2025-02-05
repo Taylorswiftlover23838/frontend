@@ -18,6 +18,9 @@ import BlackJackFairness from "./Pages/Fairness/BlackJackFairness";
 import LimboFairness from "./Pages/Fairness/LimboFairness";
 import MinesFairness from "./Pages/Fairness/MinesFairness";
 import DiceFairness from "./Pages/Fairness/DiceFairness";
+import TermsOfService from "./Pages/About/TermsOfService";
+import PrivacyPolicy from "./Pages/About/PrivacyPolicy";
+import AMLPolicy from "./Pages/About/AMLPolicy";
 
 import WebSocketListener from "./utils/hooks/Websocketlistener";
 
@@ -45,6 +48,9 @@ export default function App() {
               <Route path="/fairness/mines" element={<MinesFairness />} />
               <Route path="/fairness/limbo" element={<LimboFairness />} />
               <Route path="/fairness/dice" element={<DiceFairness />} />
+              <Route path="/about/terms-of-service" element={<TermsOfService/>}/>
+              <Route path="/about/privacy-policy" element={<PrivacyPolicy/>}/>
+              <Route path="/about/aml-policy" element={<AMLPolicy/>}/>
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </SideBar>

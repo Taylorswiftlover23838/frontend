@@ -25,15 +25,22 @@ export default function Footer() {
         <div>
           <h3 className="font-bold mb-2 md:mb-4 text-center md:text-left">About</h3>
           <ul className="text-xs md:text-sm space-y-1 md:space-y-2 text-center md:text-left">
-
-    
+            <li>
+              <Link to="/about/terms-of-service" className="hover:underline text-blue-400">Terms of Service</Link>
+            </li>
+            <li>
+              <Link to="/about/privacy-policy" className="hover:underline text-blue-400">Privacy Policy</Link>
+            </li>
+            <li>
+              <Link to="/about/aml-policy" className="hover:underline text-blue-400">AML Policy</Link>
+            </li>
           </ul>
         </div>
 
         <div>
           <h3 className="font-bold mb-2 md:mb-4 text-center md:text-left">Fairness</h3>
           <ul className="text-xs md:text-sm space-y-1 md:space-y-2 text-center md:text-left">
-          <li>
+            <li>
               <Link to="/fairness/mines" className="hover:underline text-blue-400">Mines</Link>
             </li>
             <li>
@@ -51,7 +58,6 @@ export default function Footer() {
         <div>
           <h3 className="font-bold mb-2 md:mb-4 text-center md:text-left">Support</h3>
           <ul className="text-xs md:text-sm space-y-1 md:space-y-2 text-center md:text-left">
-
 
           </ul>
         </div>
