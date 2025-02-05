@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header';
 import { GiClover } from "react-icons/gi";
 import useAuthStore from '../../utils/ZustandStore/useAuthStore';
@@ -16,10 +16,20 @@ function DiceFairness() {
     { linkText: "Limbo", linkUrl: "/fairness/limbo" },
   ];
 
+  const [diceHistory, setHistoryData] = useState([]);
+  const [date, setDate] = useState("");
+
+  useEffect(() => {
+    const estDate = new Date().toLocaleDateString("en-CA", {
+      timeZone: "America/New_York",
+    });
+    setDate(estDate);
+  }, []);
+
   const fetchHistory = async () => {
     try {
       const response = await api.post('/dice/dice-history');
-      console.log(response.data)
+      setHistoryData(response.data);
     } catch (err) {
       console.error('Error fetching history:', err);
     }
@@ -76,8 +86,44 @@ function DiceFairness() {
                 <input
                   type="date"
                   className="px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
                 />
               </div>
+              {diceHistory.length > 0 ? (
+                <div className="p-4 bg-gray-900 text-white rounded-lg">
+                  <h2 className="text-lg font-bold mb-4">Dice History</h2>
+                  <table className="w-full text-left table-auto border-collapse border border-gray-700">
+                    <thead>
+                      <tr className="bg-gray-800 text-white">
+                        <th className="p-2 border border-gray-700">Roll</th>
+                        <th className="p-2 border border-gray-700">Client Seed</th>
+                        <th className="p-2 border border-gray-700">Server Seed</th>
+                        <th className="p-2 border border-gray-700">Nonce</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {diceHistory.map((entry, index) => (
+                        <tr key={index} className="hover:bg-gray-700">
+                          <td className="p-2 border border-gray-700">{entry.roll}</td>
+                          <td className="p-2 border border-gray-700">{entry.fairness.clientSeed}</td>
+                          <td
+                            className={`p-2 border border-gray-700 ${entry.fairness.active ? "text-purple-500" : "text-white"
+                              }`}
+                          >
+                            {entry.fairness.serverSeed}
+                          </td>
+                          <td className="p-2 border border-gray-700">{entry.nonce}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="p-4 bg-gray-900 text-white rounded-lg">
+                  <p>No dice history available. Start rolling!</p>
+                </div>
+              )}
             </>
           ) : (
             <div className="p-4 bg-gray-900 text-white rounded-lg flex flex-col items-center justify-center space-y-6">

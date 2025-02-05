@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header';
 import { GiClover } from "react-icons/gi";
 import useAuthStore from '../../utils/ZustandStore/useAuthStore';
@@ -16,11 +16,19 @@ function LimboFairness() {
     { linkText: "Limbo", linkUrl: "/fairness/limbo" },
   ];
 
+  const [date, setDate] = useState("");
+
+  useEffect(() => {
+    const estDate = new Date().toLocaleDateString("en-CA", {
+      timeZone: "America/New_York",
+    });
+    setDate(estDate);
+  }, []);
 
   const fetchHistory = async () => {
     try {
       const response = await api.post('/limbo/limbo-history');
-      console.log(response.data)
+      console.log(response.data);
     } catch (err) {
       console.error('Error fetching history:', err);
     } 
@@ -43,17 +51,17 @@ function LimboFairness() {
           <div className="p-4 bg-gray-900 text-white rounded-lg">
             <h1 className="text-xl font-bold mb-4">Limbo</h1>
             <p className="mb-4">
-              Our system generates the result for each card by hashing the
+              Our system generates the result for each round by hashing the
               combination of these 3 inputs:
             </p>
             <ul className="list-disc pl-6 mb-4">
               <li>Client Seed: a random or custom string.</li>
               <li>Server Seed: a SHA-256 hash of 16 random characters.</li>
-              <li>Nonce: an integer incremented every time a play is placed or card is dealt.</li>
+              <li>Nonce: an integer incremented every time a play is placed.</li>
             </ul>
             <p className="mb-4">
-              For independent verification, you may replicate the results of any round by using{" "}
-              <span className="text-blue-400 underline">this code</span> and copying the input below.
+              For independent verification, you may replicate the results of any round by using
+              <span className="text-blue-400 underline"> this code</span> and copying the input below.
             </p>
             <p>
               You must generate a new server seed by changing your client seed before you can verify your
@@ -64,22 +72,24 @@ function LimboFairness() {
 
           {loggedIn ? (
             <>
-            <div className="p-4 bg-gray-900 text-white rounded-lg flex items-center justify-between">
-              <p className='text-green-400'>
-                Change Client Seed
-              </p>
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none" onClick={openFairnessModal}>
-                Change
-              </button>
-            </div>
-            <div className="p-4 bg-gray-900 rounded-lg flex items-center justify-between">
-              <p className="text-white">Show Rolls for:</p>
-              <input
-                type="date"
-                className="px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none"
-              />
-            </div>
-          </>
+              <div className="p-4 bg-gray-900 text-white rounded-lg flex items-center justify-between">
+                <p className='text-green-400'>
+                  Change Client Seed
+                </p>
+                <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none" onClick={openFairnessModal}>
+                  Change
+                </button>
+              </div>
+              <div className="p-4 bg-gray-900 rounded-lg flex items-center justify-between">
+                <p className="text-white">Show Rolls for:</p>
+                <input
+                  type="date"
+                  className="px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+              </div>
+            </>
           ) : (
             <div className="p-4 bg-gray-900 text-white rounded-lg flex flex-col items-center justify-center space-y-6">
               <p className='text-red-500'>Please log in to replicate your past games</p>
