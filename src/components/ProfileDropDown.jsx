@@ -1,14 +1,15 @@
 import React from "react";
-import  useDropdownStore from "../utils/ZustandStore/useDropDownStore";
+import { useNavigate, Link } from "react-router-dom";
+import useDropdownStore from "../utils/ZustandStore/useDropDownStore";
 import api from "../utils/Api/axiosConfig";
 import useAuthStore from "../utils/ZustandStore/useAuthStore";
 import { toast } from "react-hot-toast";
-import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 import { ImExit } from "react-icons/im";
 import { MdOutlineSupportAgent } from "react-icons/md";
 
 export default function ProfileDropDown() {
+  const navigate = useNavigate();
   const { isProfileDropDownOpen, toggleProfileDropDown } = useDropdownStore(
     (state) => state
   );
@@ -22,6 +23,7 @@ export default function ProfileDropDown() {
       toggleProfileDropDown();
       setLoggedIn(false);
       clearAccessToken();
+      navigate("/"); 
     } catch (error) {
       toast.error(error.response?.data?.message || "Logout failed");
     }
